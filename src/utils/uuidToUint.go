@@ -10,3 +10,4 @@ func UuidToUint(id uuid.UUID) (uint, error) {
     // ここで適切な変換ロジックを実装してください
     return uintID, nil
 }
+

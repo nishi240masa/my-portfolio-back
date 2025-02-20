@@ -1,24 +1,42 @@
 package repositories
 
-import "w3st/models"
+import (
+	"w3st/models"
+
+	"gorm.io/gorm"
+)
 
 
+type UserRepository interface {
+	CreateUser(newUser *models.User) error
+	FindUser(email string) (*models.User, error)
+}
+
+type userRepository struct {
+	db *gorm.DB
+}
+
+func NewUserRepository(db *gorm.DB) *userRepository {
+	return &userRepository{db}
+}
 
 
-func CreateUser(newUser *models.User) error {
-	result := db.Create(newUser)
+// Create
+func (r *userRepository) CreateUser(newUser *models.User) error {
+	result := r.db.Create(newUser)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-
-func FindUser (email string) (*models.User, error) {
+// Find
+func (r *userRepository) FindUser (email string) (*models.User, error) {
 	var user models.User
-	result := db.Where("email = ?", email).First(&user)
+	result := r.db.Where("email = ?", email).First(&user)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return &user, nil
+	
 }
